@@ -1,0 +1,72 @@
+regex commande 
+
+                    if (s.toString().matches("\\d+\\;\\d+")) {
+                        ValidateScan();
+                    } else {
+                        Toast tScanNotOrder = Toast.makeText(getApplicationContext(), "Veuillez Scanner un numéro de commande valide", Toast.LENGTH_SHORT);
+                        tScanNotOrder.show();
+                    }
+
+
+
+unité 
+
+                            if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("c")) {
+                                mColis2.setText(currentRow.getString("q_gcbp_ua1"));
+                                mPiece2.setText("/");
+                                mPiece3.setText("/");
+                                mPoidNet2.setText("/");
+                                mPoidNet3.setText("/");
+                                mPoidBrut2.setText("/");
+                                mPoidBrut3.setText("/");
+                                mTarre2.setText("/");
+                                mTarre3.setText("/");
+                            } else if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("st")) {
+                                mPiece2.setText(currentRow.getString("q_gcbp_ua3"));
+                                mColis2.setText("/");
+                                mColis3.setText("/");
+                                mPoidNet2.setText("/");
+                                mPoidNet3.setText("/");
+                                mPoidBrut2.setText("/");
+                                mPoidBrut3.setText("/");
+                                mTarre2.setText("/");
+                                mTarre3.setText("/");
+                            } else if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("k")) {
+                                mPoidNet2.setText(currentRow.getString("q_gcbp_ua9"));
+                                mColis2.setText("/");
+                                mColis3.setText("/");
+                                mPiece2.setText("/");
+                                mPiece3.setText("/");
+                                mPoidBrut2.setText("/");
+                                mPoidBrut3.setText("/");
+                                mTarre2.setText("/");
+                                mTarre3.setText("/");
+                            }
+
+
+maj champs
+        float ua1 = Integer.parseInt(mColis3.getText().toString());
+        float ua3 = Integer.parseInt(mPiece3.getText().toString());
+        float ua5 = Integer.parseInt(mTarre3.getText().toString());
+        float ua6 = Integer.parseInt(mPoidNet3.getText().toString());
+        float ua9 = Integer.parseInt(mPoidBrut3.getText().toString());
+
+        float ua1_2 = Integer.parseInt(mColis2.getText().toString());
+        float ua_2_2;
+        float ua3_2 = Integer.parseInt(mPiece2.getText().toString());
+        float ua5_2 = Integer.parseInt(mTarre2.getText().toString());
+        float ua6_2 = Integer.parseInt(mPoidNet2.getText().toString());
+        float ua_8_2;
+        float ua9_2 = Integer.parseInt(mPoidBrut2.getText().toString());
+
+        float ua2 = Integer.parseInt(sua_2_2);
+        float ua8 = Integer.parseInt(sua_8_2);
+
+        if(ua1 != 0) {
+            // Piece u
+            ua_2_2 = ua3 / ua1;
+            // Poids u
+            ua_8_2 = ua9 / ua1;
+            // Poids brut
+            ua5 = ua1 * ( ua8 + ua6 );
+        }
