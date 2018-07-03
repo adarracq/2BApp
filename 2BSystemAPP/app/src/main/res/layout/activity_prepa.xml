@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/android_background_nologo"
+    tools:context=".MainActivity">
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+
+            /*Client*/
+            <TextView
+                android:id="@+id/prepa_client1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/colorAccent"
+                android:text="Client"
+                android:textSize="17dp"
+                android:gravity="end" />
+
+            <TextView
+                android:id="@+id/prepa_client2"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:maxLines="1"
+                android:background="@drawable/border"
+                android:hint="Client"
+                />
+
+
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            /*No commande*/
+            <TextView
+                android:id="@+id/prepa_NoCommande1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:text="N° Cde"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_NoCommande2"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="N° Commande"/>
+
+
+            /*No ligne*/
+
+            <TextView
+                android:id="@+id/prepa_NoLigne"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="N° Ligne"/>
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            /*Article*/
+            <TextView
+                android:id="@+id/prepa_Article1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:text="Article"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_Article2"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:maxLines="1"
+                android:text="Article"/>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            /*Lot*/
+            <TextView
+                android:id="@+id/prepa_Lot1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:textSize="17dp"
+                android:text="Lot"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <EditText
+                android:id="@+id/prepa_Lot2"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:inputType="text"
+                android:maxLines="1"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+            /*Gamme*/
+            <TextView
+                android:id="@+id/prepa_Gamme1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:textSize="17dp"
+                android:text="Gamme"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_Gamme2"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="Gamme"/>
+
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            /*Colis*/
+            <TextView
+                android:id="@+id/prepa_Colis1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:text="Colis"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_Colis2"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="Colis"/>
+
+            <EditText
+                android:id="@+id/prepa_Colis3"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:inputType="number"
+                android:maxLines="1"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            /*Pieces*/
+            <TextView
+                android:id="@+id/prepa_Piece1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:text="Pièces"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_Piece2"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="Pièces"/>
+
+            <EditText
+                android:id="@+id/prepa_Piece3"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:inputType="number"
+                android:maxLines="1"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            /*Tarre*/
+            <TextView
+                android:id="@+id/prepa_Tarre1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:text="Tare "
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_Tarre2"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="Tare"/>
+
+            <EditText
+                android:id="@+id/prepa_Tarre3"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            /*Poids Brut*/
+            <TextView
+                android:id="@+id/prepa_PoidBrut1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:text="Pds brut"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_PoidBrut2"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="Pds brut"/>
+
+            <TextView
+                android:id="@+id/prepa_PoidBrut3"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:inputType="numberDecimal"
+                android:text="Pds brut"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            /*Poids net*/
+            <TextView
+                android:id="@+id/prepa_PoidNet1"
+                android:layout_width="65dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:text="Pds net"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <TextView
+                android:id="@+id/prepa_PoidNet2"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:background="@drawable/border"
+                android:text="Pds net"/>
+
+            <EditText
+                android:id="@+id/prepa_PoidNet3"
+                android:layout_width="145dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="17dp"
+                android:padding="4dp"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+        </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/prepa_buttonValider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:text="Valider" />
+
+        <Button
+            android:id="@+id/prepa_buttonRupture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:text="Rupture" />
+
+
+        <Button
+            android:id="@+id/prepa_buttonRecharge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:text="Recharge" />
+
+
+        <Button
+            android:id="@+id/prepa_buttonEtiqMqt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:text="Etiq. Mqte" />
+
+
+        <Button
+            android:id="@+id/prepa_buttonRetour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:text="Retour" />
+
+
+    </LinearLayout>
+</LinearLayout>

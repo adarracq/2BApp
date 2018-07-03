@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/android_background"
+    tools:context=".LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/identifiant1"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="80dp"
+            android:textSize="17dp"
+            android:text="SIGNATURE"
+            android:padding="4dp"
+            android:textColor="@color/colorAccent"
+            android:textAlignment="viewEnd"
+            android:gravity="end"/>
+
+        <EditText
+
+            android:id="@+id/identifiant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="80dp"
+            android:textSize="17dp"
+            android:hint="Signature"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="flagNoExtractUi"
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/password1"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="135dp"
+            android:padding="4dp"
+            android:textSize="17dp"
+            android:text="MOT DE PASSE"
+            android:textColor="@color/colorAccent"
+            android:textAlignment="viewEnd"
+            android:gravity="end"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="135dp"
+            android:textSize="17dp"
+
+            android:maxLines="1"
+            android:inputType="textPassword"
+            android:hint="Mot de passe"
+            android:imeOptions="flagNoExtractUi"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/connexion_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="180dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
+        android:padding="20dp"
+        android:text="Connexion" />
+
+    <Button
+        android:id="@+id/config_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="260dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
+        android:padding="20dp"
+        android:text="Configuration"
+        />
+
+</FrameLayout>

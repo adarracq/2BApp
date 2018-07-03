@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/android_background"
+
+    tools:context=".MainActivity">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/config_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text=""
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            /*Ip*/
+
+            <TextView
+                android:id="@+id/config_ip1"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:gravity="end"
+                android:text="IP"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:textSize="17dp" />
+
+            <EditText
+                android:id="@+id/config_ip2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:hint="127.0.0.1"
+                android:paddingLeft="3dp"
+                android:textSize="17dp"
+                android:maxLines="1"
+                android:inputType="number"
+                android:digits="0123456789."
+                android:imeOptions="flagNoExtractUi"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            /*Port*/
+
+            <TextView
+                android:id="@+id/config_port1"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="end"
+                android:text="PORT"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:textSize="17dp" />
+
+            <EditText
+                android:id="@+id/config_port2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:hint="80"
+                android:paddingLeft="3dp"
+                android:textSize="17dp"
+                android:maxLines="1"
+                android:inputType="number"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            /*BDD*/
+
+            <TextView
+                android:id="@+id/config_bdd1"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="end"
+                android:text="BDD"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:textSize="17dp" />
+
+            <EditText
+                android:id="@+id/config_bdd2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:hint="IIBSYSTEM"
+                android:paddingLeft="3dp"
+                android:textSize="17dp"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            /*Ip*/
+
+            <TextView
+                android:id="@+id/config_code_soc1"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="end"
+                android:text="SOCIÉTÉ"
+                android:textColor="@color/colorAccent"
+                android:textAlignment="viewEnd"
+                android:textSize="17dp" />
+
+            <EditText
+                android:id="@+id/config_code_soc2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:hint="9999"
+                android:inputType="number"
+                android:paddingLeft="3dp"
+                android:textSize="17dp"
+                android:maxLines="1"
+                android:imeOptions="flagNoExtractUi"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp">
+
+            <Button
+                android:id="@+id/valid_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorAccent"
+                android:textColor="@color/colorWhite"
+                android:text="Valider"
+                android:textSize="14dp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
