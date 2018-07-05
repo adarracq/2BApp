@@ -450,7 +450,7 @@
             android:layout_height="wrap_content"
             android:textSize="17dp"
             android:layout_margin="10dp"
-            android:padding="10dp"
+            android:padding="20dp"
             android:background="@color/colorAccent"
             android:textColor="@color/colorWhite"
             android:text="Valider" />
@@ -461,7 +461,7 @@
             android:layout_height="wrap_content"
             android:textSize="17dp"
             android:layout_margin="10dp"
-            android:padding="10dp"
+            android:padding="20dp"
             android:background="@color/colorAccent"
             android:textColor="@color/colorWhite"
             android:text="Rupture" />
@@ -473,22 +473,12 @@
             android:layout_height="wrap_content"
             android:textSize="17dp"
             android:layout_margin="10dp"
-            android:padding="10dp"
+            android:padding="20dp"
             android:background="@color/colorAccent"
             android:textColor="@color/colorWhite"
             android:text="Recharge" />
 
 
-        <Button
-            android:id="@+id/prepa_buttonEtiqMqt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="17dp"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:background="@color/colorAccent"
-            android:textColor="@color/colorWhite"
-            android:text="Etiq. Mqte" />
 
 
         <Button
@@ -497,7 +487,7 @@
             android:layout_height="wrap_content"
             android:textSize="17dp"
             android:layout_margin="10dp"
-            android:padding="10dp"
+            android:padding="20dp"
             android:background="@color/colorAccent"
             android:textColor="@color/colorWhite"
             android:text="Retour" />

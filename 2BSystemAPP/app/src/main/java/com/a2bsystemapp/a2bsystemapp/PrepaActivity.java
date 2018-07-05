@@ -116,10 +116,6 @@ public class PrepaActivity extends AppCompatActivity {
     AsyncHttpClient client = new AsyncHttpClient();
 
     private void refresh (){
-        if(mLot2.getText().toString().length() > 2) {
-            nBatchid = mLot2.getText().toString().substring(3).replaceAll("^0+", "");
-            getUa();
-        }
         mColis3.setText("" + ua1);
         mPiece3.setText("" + ua3);
         mTarre3.setText("" + (Math.round(ua6 * 100.0) / 100));
@@ -203,43 +199,15 @@ public class PrepaActivity extends AppCompatActivity {
     }
 
     private boolean verifLot(){
-        // Chargement des champs
-        url = "http://" + IP + ":" + Port + "/verifLot";
-        // Parametres body de la requete
-        RequestParams params = new RequestParams();
-        params.put("user", Sy2.user);
-        params.put("password", Sy2.password);
-        params.put("bdd", Bdd);
-        params.put("foretagkod", Foretagkod);
-        params.put("artnr", artnr);
-        params.put("batchid", nBatchid);
-        params.setUseJsonStreamer(true);
-
-        client.post(url, params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                JSONObject currentRow = Helper.GetFirstRow(responseBody);
-                try {
-                    if(currentRow.getString("exist").equalsIgnoreCase("1")){
-                        lotOk = true;
-                    }
-                    else {
-                        lotOk = false;
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
-        });
-        return lotOk;
-    }
-
-    private void getUa(){
-        if (verifLot() == true) {
+        wrongLot = Toast.makeText(getApplicationContext(), "Erreur lot", Toast.LENGTH_SHORT);
+        if(mLot2.getText().toString().length() == 0){
+            nBatchid = "N/A";
+            return true;
+        }
+        else if(mLot2.getText().toString().length() == 12) {
+            nBatchid = mLot2.getText().toString().substring(3).replaceAll("^0+", "");
             // Chargement des champs
-            url = "http://" + IP + ":" + Port + "/getUa268";
+            url = "http://" + IP + ":" + Port + "/verifLot";
             // Parametres body de la requete
             RequestParams params = new RequestParams();
             params.put("user", Sy2.user);
@@ -255,11 +223,12 @@ public class PrepaActivity extends AppCompatActivity {
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     JSONObject currentRow = Helper.GetFirstRow(responseBody);
                     try {
-                        //maj ua2 ua6 et ua 8 depuis bat
-                        ua2_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua2").toString());
-                        ua6_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua6").toString());
-                        ua8_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua8").toString());
-                        System.out.println("maj ok :::" + currentRow.getString("q_gcbp_ua2").toString());
+                        if (currentRow.getString("exist").equalsIgnoreCase("1")) {
+                            lotOk = true;
+                        } else {
+                            lotOk = false;
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -269,7 +238,46 @@ public class PrepaActivity extends AppCompatActivity {
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 }
             });
+            return true;
         }
+        else{
+            wrongLot.show();
+            return false;
+        }
+    }
+
+    private void getUa(){
+        // Chargement des champs
+        url = "http://" + IP + ":" + Port + "/getUa268";
+        // Parametres body de la requete
+        RequestParams params = new RequestParams();
+        params.put("user", Sy2.user);
+        params.put("password", Sy2.password);
+        params.put("bdd", Bdd);
+        params.put("foretagkod", Foretagkod);
+        params.put("artnr", artnr);
+        params.put("batchid", nBatchid);
+        params.setUseJsonStreamer(true);
+
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                JSONObject currentRow = Helper.GetFirstRow(responseBody);
+                try {
+                    //maj ua2 ua6 et ua 8 depuis bat
+                    ua2_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua2").toString());
+                    ua6_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua6").toString());
+                    ua8_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua8").toString());
+                    System.out.println("maj ok :::" + currentRow.getString("q_gcbp_ua2").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            }
+        });
     }
 
     private void Rupture() {
@@ -384,7 +392,6 @@ public class PrepaActivity extends AppCompatActivity {
         mValidButton    = (android.widget.Button) findViewById(R.id.prepa_buttonValider);
         mRuptureButton  = (android.widget.Button) findViewById(R.id.prepa_buttonRupture);
         mRechargeButton = (android.widget.Button) findViewById(R.id.prepa_buttonRecharge);
-        mEtiqButton     = (android.widget.Button) findViewById(R.id.prepa_buttonEtiqMqt);
         mRetourButton   = (android.widget.Button) findViewById(R.id.prepa_buttonRetour);
 
         mClient1        = (TextView)              findViewById(R.id.prepa_client1);
@@ -565,20 +572,18 @@ public class PrepaActivity extends AppCompatActivity {
                 wrongLot = Toast.makeText(getApplicationContext(), "Erreur lot", Toast.LENGTH_SHORT);
 
                 //Test du lot
-                if (mLot2.getText().toString().length() == 0){
-                    nBatchid = "N/A";
-                    Validate();
-                }
-                else if (mLot2.getText().toString().length() != 12){
-                    wrongLot.show();
-                }
-                else if ( !(Foretagkod.substring(2,4).equalsIgnoreCase(mLot2.getText().toString().substring(0,2)))) {
-                    wrongLot.show();
-                }
-                else {
-                    //batchid = 10 derniers carac du lot sans les 0
-                    nBatchid = mLot2.getText().toString().substring(3).replaceAll("^0+", "");
-                    Validate();
+                if (verifLot() == true) {
+                    getUa();
+                    if (mLot2.getText().toString().length() == 0) {
+                        nBatchid = "N/A";
+                        Validate();
+                    } else if (!(Foretagkod.substring(2, 4).equalsIgnoreCase(mLot2.getText().toString().substring(0, 2)))) {
+                        wrongLot.show();
+                    } else {
+                        //batchid = 10 derniers carac du lot sans les 0
+                        nBatchid = mLot2.getText().toString().substring(3).replaceAll("^0+", "");
+                        Validate();
+                    }
                 }
             }
         });
@@ -588,17 +593,17 @@ public class PrepaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(PrepaActivity.this);
-                builder.setTitle("CONFIRMATION");
+                builder.setTitle("RUPTURE");
                 builder.setMessage("Confirmer rupture ?");
                 builder.setCancelable(false);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Rupture();
                         RuptureUpdateQoffnr();
                     }
                 });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getApplicationContext(), "Annulation", Toast.LENGTH_SHORT).show();
@@ -613,16 +618,16 @@ public class PrepaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(PrepaActivity.this);
-                builder.setTitle("CONFIRMATION");
-                builder.setMessage("Confirmer recharge ?");
+                builder.setTitle("RECHARGE");
+                builder.setMessage("Confirmer ?");
                 builder.setCancelable(false);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Recharge();
                     }
                 });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getApplicationContext(), "Annulation", Toast.LENGTH_SHORT).show();
@@ -644,7 +649,6 @@ public class PrepaActivity extends AppCompatActivity {
         mLot2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                getUa();
                 ua3 = ua1 * ua2_2;
                 ua9 = ua1 * ua8_2;
                 ua5 = ua1 * ( ua6_2 + ua8_2 );

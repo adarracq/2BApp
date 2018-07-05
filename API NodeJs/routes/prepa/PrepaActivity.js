@@ -26,6 +26,7 @@ module.exports = function(app){
     app.post('/verifLot', async function(req, res){
       var request = verifLot(req.body.artnr,
                              req.body.batchid );
+      console.log(request);
       await app.executeSQLQuery(req, res, request);
     });
 
@@ -34,6 +35,7 @@ module.exports = function(app){
     app.post('/getUa268', async function(req, res){
       var request = getUa268(req.body.artnr,
                              req.body.batchid );
+      console.log(request);
       await app.executeSQLQuery(req, res, request);
     });
 
@@ -295,7 +297,7 @@ function rechargeBtn (foretagkod, ordernr, dummyuniqueid, ordradnr){
 
 
 function ruptureFindLines (foretagkod, ordernr, ordradnr){
-  return `SELECT COUNT(1) as exit
+  return `SELECT COUNT(1) as exist
 
           FROM q_2bt_prepa
 
