@@ -52,29 +52,8 @@ public class PrepaListActivity extends AppCompatActivity {
     private TextView mHeader;
     private String prep = "";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
 
-        listView = (ListView) findViewById(R.id.listView);
-        mHeader = (TextView) findViewById(R.id.header);
-
-
-        //Recuperation ordernr et gamme dans orderAndGamme
-        Intent intent  = getIntent();
-        barcode = intent.getStringExtra("barcode");
-        ordernr = barcode.toString().split(";")[0];
-        gamme   = barcode.toString().split(";")[1].replaceAll("[\n]+", "");
-
-        //Recup de l'IP / Port / BDD
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(ConfigActivity.Config, 0);
-        IP         = sharedPreferences.getString("IP",null);
-        Port       = sharedPreferences.getString("Port",null);
-        Bdd        = sharedPreferences.getString("BDD",null);
-        Foretagkod = sharedPreferences.getString("Foretagkod",null);
-
-
+    private void LoadList(){
         //Recuperation des lignes
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -100,57 +79,50 @@ public class PrepaListActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+
+
                 int i = 0;
-                ArrayList<HashMap<String, String>> listItem = new ArrayList<>();
-                //On déclare la HashMap qui contiendra les informations pour une ligne
-                HashMap<String, String> map;
 
                 while( Helper.GetRowAt(responseBody , i) != null) {
                     i = i + 1;
                 }
                 nbLignes = i;
 
+                ArrayList<PrepaListRowData> dataList = new ArrayList<PrepaListRowData>();
+
+                ListView listView = (ListView) findViewById(R.id.listView);
+
                 for( int j = 0 ; j < i ; j++ ) {
-                    JSONObject currentRow = Helper.GetRowAt(responseBody , j);
+                    JSONObject currentRow = Helper.GetRowAt(responseBody, j);
+                    PrepaListRowData p = new PrepaListRowData();
                     try {
-                        //Rempli l'en-tete
-                        mHeader.setText("COMMANDE N° " + ordernr + "   CLIENT : " + currentRow.getString("ftgnamn"));
 
-                        if(!currentRow.getString("q_pal_code").equalsIgnoreCase("null")) {
-                            //met en vert les lignes avec un code palette
-                            //listView.
-                            //lv.getChildAt(j).setBackgroundColor(Color.parseColor("#B6FE7D"));
-                            //prep = " déja prepa";
+                        mHeader.setText("CDE N° " + ordernr + "  |  GM : " + gamme +  "  |  CLIENT : " + currentRow.getString("ftgnamn"));
 
-                        }
+                        p.Article = currentRow.getString("q_gcar_lib1");
+                        p.q_pal_code = currentRow.getString("q_pal_code");
 
                         if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("c")) {
                             quantity = currentRow.getString("q_gcbp_ua1") + " Colis" + prep;
-                        } else if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("st")) {
+                        }
+                        else if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("st")) {
                             quantity = currentRow.getString("q_gcbp_ua3") + " Pièces" + prep;
-                        } else if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("k")) {
+                        }
+                        else if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("k")) {
                             quantity = currentRow.getString("q_gcbp_ua9") + " Kg" + prep;
                         }
-
-                        //Création d'une HashMap pour insérer les informations de la premiere ligne
-                        map = new HashMap<String, String>();
-
-                        //on insère l'article et la quantité
-                        map.put("article",currentRow.getString("q_gcar_lib1"));
-                        map.put("quantite", quantity);
-
-                        listItem.add(map);
+                        p.Quantite = quantity;
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    dataList.add(p);
                 }
 
-
-                SimpleAdapter adapter = new SimpleAdapter (PrepaListActivity.this, listItem, R.layout.prepa_line,
-                        new String[] {"article", "quantite"}, new int[] {R.id.article, R.id.quantite});
-
+                PrepaListRowDataAdapter adapter = new PrepaListRowDataAdapter(PrepaListActivity.this, R.layout.prepa_line, dataList);
                 listView.setAdapter(adapter);
+
 
                 // Ecoute des clicks sur les lignes
                 listView.setClickable(true);
@@ -166,25 +138,46 @@ public class PrepaListActivity extends AppCompatActivity {
                     }
                 });
 
-                //while(listView.getChildCount()<1){}
-
-                for(int iRow = 0; iRow < listView.getAdapter().getCount(); iRow++)
-                {
-                    View currentRowView = listView.getChildAt(iRow);
-                    //currentRowView.setBackgroundColor(getResources().getColor(R.color.green));
-                }
             }
 
             @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
             @Override public void onRetry(int retryNo) { }
         });
     }
-}
 
-/*
-à corriger !!!
-public class PrepaListAdapter extends SimpleAdapter {
-    public PrepaListAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
-        super(context, data, resource, from, to);
+    private void LoadVar(){
+        setContentView(R.layout.activity_list);
+
+        listView = (ListView) findViewById(R.id.listView);
+        mHeader = (TextView) findViewById(R.id.header);
+
+
+        //Recuperation ordernr et gamme dans orderAndGamme
+        Intent intent  = getIntent();
+        barcode = intent.getStringExtra("barcode");
+        ordernr = barcode.toString().split(";")[0];
+        gamme   = barcode.toString().split(";")[1].replaceAll("[\n]+", "");
+
+        //Recup de l'IP / Port / BDD
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(ConfigActivity.Config, 0);
+        IP         = sharedPreferences.getString("IP",null);
+        Port       = sharedPreferences.getString("Port",null);
+        Bdd        = sharedPreferences.getString("BDD",null);
+        Foretagkod = sharedPreferences.getString("Foretagkod",null);
     }
-}*/
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        LoadVar();
+        LoadList();
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        LoadVar();
+        LoadList();
+    }
+}

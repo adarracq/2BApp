@@ -25,7 +25,7 @@ function loadLines (foretagkod, ordernr, q_gclibrubrique){
                   q_2bt_prepa.q_gcbp_ua1,
                   q_2bt_prepa.q_gcbp_ua3,
                   q_2bt_prepa.q_gcbp_ua9,
-                  q_2bt_prepa.q_pal_code,
+                  ISNULL(q_2bt_prepa.q_pal_code,0) as q_pal_code,
                   q_2bt_prepa.foretagkod,
                   q_2bt_prepa.OrderNr,
                   q_2bt_prepa.ordradnr,

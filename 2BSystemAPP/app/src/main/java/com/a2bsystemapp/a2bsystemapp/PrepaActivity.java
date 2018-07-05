@@ -1,5 +1,8 @@
 package com.a2bsystemapp.a2bsystemapp;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -27,7 +30,6 @@ import cz.msebera.android.httpclient.Header;
 public class PrepaActivity extends AppCompatActivity {
 
     private android.widget.Button mValidButton;
-    private android.widget.Button mChLigneButton;
     private android.widget.Button mRuptureButton;
     private android.widget.Button mRechargeButton;
     private android.widget.Button mEtiqButton;
@@ -107,6 +109,7 @@ public class PrepaActivity extends AppCompatActivity {
     float ua9_2;
 
     boolean lotOk;
+    private String q_pal_code;
 
     private Toast wrongLot;
 
@@ -140,7 +143,7 @@ public class PrepaActivity extends AppCompatActivity {
         params.put("bdd", Bdd);
         params.put("foretagkod", Foretagkod);
         params.put("ordernr", ordernr);
-        params.put("q_gclibrubrique", barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
+        params.put("q_pal_code", q_pal_code);
         params.put("dummyuniqueid", dummyuniqueid);
         params.put("ordradnr", ordradnr);
         params.put("ordrestnr", ordrestnr);
@@ -170,6 +173,35 @@ public class PrepaActivity extends AppCompatActivity {
         });
     }
 
+    // EXEC q_2bp_RRH_GetCodePalette foretagkod, ordernr}, q_gclibrubrique
+    private void getPalCode(){
+        // Chargement des champs
+        url = "http://" + IP + ":" + Port + "/getPalCode";
+        // Parametres body de la requete
+        RequestParams params = new RequestParams();
+        params.put("user", Sy2.user);
+        params.put("password", Sy2.password);
+        params.put("bdd", Bdd);
+        params.put("foretagkod", Foretagkod);
+        params.put("ordernr", ordernr);
+        params.put("q_gclibrubrique", barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
+        params.setUseJsonStreamer(true);
+
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                JSONObject currentRow = Helper.GetFirstRow(responseBody);
+                try{
+                    q_pal_code = currentRow.getString("q_pal_code");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
+        });
+    }
+
     private boolean verifLot(){
         // Chargement des champs
         url = "http://" + IP + ":" + Port + "/verifLot";
@@ -190,18 +222,15 @@ public class PrepaActivity extends AppCompatActivity {
                 try {
                     if(currentRow.getString("exist").equalsIgnoreCase("1")){
                         lotOk = true;
-                        System.out.println("Verif lot ok");
                     }
-                    else{
+                    else {
                         lotOk = false;
-                        System.out.println("Verif lot pas ok");
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
             @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
         });
         return lotOk;
@@ -245,23 +274,21 @@ public class PrepaActivity extends AppCompatActivity {
 
     private void Rupture() {
         // Chargement des champs
-        url = "http://" + IP + ":" + Port + "/btn_rupture";
+        url = "http://" + IP + ":" + Port + "/ruptureBtn";
         // Parametres body de la requete
         RequestParams params = new RequestParams();
         params.put("user", Sy2.user);
         params.put("password", Sy2.password);
         params.put("bdd", Bdd);
         params.put("foretagkod", Foretagkod);
-        /*
         params.put("ordernr", ordernr);
-        params.put("q_gclibrubrique", barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
-        */
+        params.put("dummyuniqueid", dummyuniqueid);
+        params.put("ordradnr", ordradnr);
+        params.setUseJsonStreamer(true);
 
         client.post(url, params, new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-            }
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) { }
 
             @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
         });
@@ -269,62 +296,90 @@ public class PrepaActivity extends AppCompatActivity {
 
     private void Recharge() {
         // Chargement des champs
-        url = "http://" + IP + ":" + Port + "/btn_recharge";
+        url = "http://" + IP + ":" + Port + "/rechargeBtn";
         // Parametres body de la requete
         RequestParams params = new RequestParams();
         params.put("user", Sy2.user);
         params.put("password", Sy2.password);
         params.put("bdd", Bdd);
         params.put("foretagkod", Foretagkod);
-        /*
         params.put("ordernr", ordernr);
-        params.put("q_gclibrubrique", barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
-        */
+        params.put("dummyuniqueid", dummyuniqueid);
+        params.put("ordradnr", ordradnr);
+        params.setUseJsonStreamer(true);
 
         client.post(url, params, new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-            }
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) { }
 
             @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
         });
     }
 
-    private void EtiqMqte() {
+    private void RuptureUpdateQoffnr(){
         // Chargement des champs
-        url = "http://" + IP + ":" + Port + "/btn_etiq";
+        url = "http://" + IP + ":" + Port + "/ruptureFindLines";
         // Parametres body de la requete
         RequestParams params = new RequestParams();
         params.put("user", Sy2.user);
         params.put("password", Sy2.password);
         params.put("bdd", Bdd);
         params.put("foretagkod", Foretagkod);
-        /*
         params.put("ordernr", ordernr);
-        params.put("q_gclibrubrique", barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
-        */
+        params.put("ordradnr", ordradnr);
+        params.setUseJsonStreamer(true);
 
         client.post(url, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
+                JSONObject currentRow = Helper.GetFirstRow(responseBody);
+                try {
+                    if (currentRow.getString("exist").equalsIgnoreCase("0")){
+                        RuptureUpdateOrp();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
         });
     }
+
+    private void RuptureUpdateOrp(){
+        // Chargement des champs
+        url = "http://" + IP + ":" + Port + "/ruptureUpdateOrp";
+        // Parametres body de la requete
+        RequestParams params = new RequestParams();
+        params.put("user", Sy2.user);
+        params.put("password", Sy2.password);
+        params.put("bdd", Bdd);
+        params.put("foretagkod", Foretagkod);
+        params.put("ordernr", ordernr);
+        params.put("ordradnr", ordradnr);
+        params.setUseJsonStreamer(true);
+
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) { }
+
+            @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
+        });
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prepa);
 
-        //Recuperation ordernr et gamme dans orderAndGamme
+        //Recuperation ordernr, gamme, nombre de lignes et code palette
         Intent intent = getIntent();
         barcode = intent.getStringExtra("barcode");
         position = intent.getIntExtra("position",0);
         nbLignes = intent.getIntExtra("nbLignes",1);
+        getPalCode();
 
         mValidButton    = (android.widget.Button) findViewById(R.id.prepa_buttonValider);
         mRuptureButton  = (android.widget.Button) findViewById(R.id.prepa_buttonRupture);
@@ -403,97 +458,92 @@ public class PrepaActivity extends AppCompatActivity {
                     ordradnrstrpos = currentRow.getString("OrdRadNrStrPos");
                     ordrestnr = currentRow.getString("ordrestnr");
 
-                AsyncHttpClient client2 = new AsyncHttpClient();
-                // Chargement des champs
-                url = "http://" + IP + ":" + Port + "/fillFields";
-                // Parametres body de la requete
-                RequestParams params = new RequestParams();
-                params.put("user", Sy2.user);
-                params.put("password", Sy2.password);
-                params.put("bdd", Bdd);
-                params.put("foretagkod", Foretagkod);
-                params.put("ordernr", ordernr);
-                params.put("dummyuniqueid", dummyuniqueid);
-                params.put("ordradnr", ordradnr);
-                params.put("ordrestnr", ordrestnr);
-                params.put("ordradnrstrpos", ordradnrstrpos);
-                params.put("batchid", batchid);
-                params.setUseJsonStreamer(true);
+                    AsyncHttpClient client2 = new AsyncHttpClient();
+                    // Chargement des champs
+                    url = "http://" + IP + ":" + Port + "/fillFields";
+                    // Parametres body de la requete
+                    RequestParams params = new RequestParams();
+                    params.put("user", Sy2.user);
+                    params.put("password", Sy2.password);
+                    params.put("bdd", Bdd);
+                    params.put("foretagkod", Foretagkod);
+                    params.put("ordernr", ordernr);
+                    params.put("dummyuniqueid", dummyuniqueid);
+                    params.put("ordradnr", ordradnr);
+                    params.put("ordrestnr", ordrestnr);
+                    params.put("ordradnrstrpos", ordradnrstrpos);
+                    params.put("batchid", batchid);
+                    params.setUseJsonStreamer(true);
 
 
-                client2.post(url, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        JSONObject currentRow = Helper.GetFirstRow(responseBody);
-                        try {
-                            // Remplissage des champs
-                            artnr = currentRow.getString("artnr");
-                            System.out.println(artnr);
+                    client2.post(url, params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                            JSONObject currentRow = Helper.GetFirstRow(responseBody);
+                            try {
+                                // Remplissage des champs
+                                artnr = currentRow.getString("artnr");
 
-                            // Poids net variable?
-                            if(currentRow.getString("artftgspec2").equalsIgnoreCase("0")) {
-                                mPoidNet3.setEnabled(false);
-                                mPoidNet3.setBackground(getResources().getDrawable(R.drawable.border));
-                            }
-                            // Nb pieces variable?
-                            if(currentRow.getString("artftgspec3").equalsIgnoreCase("0")) {
-                                mPiece3.setEnabled(false);
-                                mPiece3.setBackground(getResources().getDrawable(R.drawable.border));
-                            }
+                                // Poids net variable?
+                                if(currentRow.getString("artftgspec2").equalsIgnoreCase("0")) {
+                                    mPoidNet3.setEnabled(false);
+                                    mPoidNet3.setBackground(getResources().getDrawable(R.drawable.border));
+                                }
+                                // Nb pieces variable?
+                                if(currentRow.getString("artftgspec3").equalsIgnoreCase("0")) {
+                                    mPiece3.setEnabled(false);
+                                    mPiece3.setBackground(getResources().getDrawable(R.drawable.border));
+                                }
 
-                            mClient2.setText(currentRow.getString("ftgnamn"));
-                            mOrdernr.setText(currentRow.getString("OrderNr"));
-                            mArticle2.setText(currentRow.getString("q_gcar_lib1"));
-                            mLigne.setText(currentRow.getString("OrdRadNr"));
-                            mGamme2.setText(barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
+                                mClient2.setText(currentRow.getString("ftgnamn"));
+                                mOrdernr.setText(currentRow.getString("OrderNr"));
+                                mArticle2.setText(currentRow.getString("q_gcar_lib1"));
+                                mLigne.setText(currentRow.getString("OrdRadNr"));
+                                mGamme2.setText(barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
 
-                            mColis2.setText(currentRow.getString("q_gcbp_ua1_2"));
-                            mPiece2.setText(currentRow.getString("q_gcbp_ua3_2"));
-                            mTarre2.setText(currentRow.getString("q_gcbp_ua6_2"));
-                            mPoidBrut2.setText(currentRow.getString("q_gcbp_ua5_2"));
-                            mPoidNet2.setText(currentRow.getString("q_gcbp_ua9_2"));
+                                mColis2.setText(currentRow.getString("q_gcbp_ua1_2"));
+                                mPiece2.setText(currentRow.getString("q_gcbp_ua3_2"));
+                                mTarre2.setText(currentRow.getString("q_gcbp_ua6_2"));
+                                mPoidBrut2.setText(currentRow.getString("q_gcbp_ua5_2"));
+                                mPoidNet2.setText(currentRow.getString("q_gcbp_ua9_2"));
 
-                            mColis3.setText(currentRow.getString("q_gcbp_ua1"));
-                            mPiece3.setText(currentRow.getString("q_gcbp_ua3"));
-                            mTarre3.setText(currentRow.getString("q_gcbp_ua6"));
-                            mPoidBrut3.setText(currentRow.getString("q_gcbp_ua5"));
-                            mPoidNet3.setText(currentRow.getString("q_gcbp_ua9"));
+                                mColis3.setText(currentRow.getString("q_gcbp_ua1"));
+                                mPiece3.setText(currentRow.getString("q_gcbp_ua3"));
+                                mTarre3.setText(currentRow.getString("q_gcbp_ua6"));
+                                mPoidBrut3.setText(currentRow.getString("q_gcbp_ua5"));
+                                mPoidNet3.setText(currentRow.getString("q_gcbp_ua9"));
 
-                            ua1   = Integer.parseInt(currentRow.getString("q_gcbp_ua1").toString());
-                            ua2   = Integer.parseInt(currentRow.getString("q_gcbp_ua2").toString());
-                            ua3   = Integer.parseInt(currentRow.getString("q_gcbp_ua3").toString());
-                            ua5   = Float.parseFloat(currentRow.getString("q_gcbp_ua5").toString());
-                            ua6   = Float.parseFloat(currentRow.getString("q_gcbp_ua6").toString());
-                            ua7   = Float.parseFloat(currentRow.getString("q_gcbp_ua7").toString());
-                            ua8   = Float.parseFloat(currentRow.getString("q_gcbp_ua8").toString());
-                            ua9   = Float.parseFloat(currentRow.getString("q_gcbp_ua9").toString());
-                            ua1_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua1_2").toString());
-                            ua2_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua2_2").toString());
-                            ua3_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua3_2").toString());
-                            ua5_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua5_2").toString());
-                            ua6_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua6_2").toString());
-                            ua7_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua7_2").toString());
-                            ua8_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua8_2").toString());
-                            ua9_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua9_2").toString());
+                                ua1   = Integer.parseInt(currentRow.getString("q_gcbp_ua1").toString());
+                                ua2   = Integer.parseInt(currentRow.getString("q_gcbp_ua2").toString());
+                                ua3   = Integer.parseInt(currentRow.getString("q_gcbp_ua3").toString());
+                                ua5   = Float.parseFloat(currentRow.getString("q_gcbp_ua5").toString());
+                                ua6   = Float.parseFloat(currentRow.getString("q_gcbp_ua6").toString());
+                                ua7   = Float.parseFloat(currentRow.getString("q_gcbp_ua7").toString());
+                                ua8   = Float.parseFloat(currentRow.getString("q_gcbp_ua8").toString());
+                                ua9   = Float.parseFloat(currentRow.getString("q_gcbp_ua9").toString());
+                                ua1_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua1_2").toString());
+                                ua2_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua2_2").toString());
+                                ua3_2 = Integer.parseInt(currentRow.getString("q_gcbp_ua3_2").toString());
+                                ua5_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua5_2").toString());
+                                ua6_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua6_2").toString());
+                                ua7_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua7_2").toString());
+                                ua8_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua8_2").toString());
+                                ua9_2 = Float.parseFloat(currentRow.getString("q_gcbp_ua9_2").toString());
 
-                            if(ua1 != 0) {
-                                // Piece u
-                                ua2_2 = ua3 / ua1;
-                                // Poids u
-                                ua8_2 = ua9 / ua1;
-                                // Poids brut
-                                ua5 = ua1 * ( ua8 + ua6 );
-                            }
+                                if(ua1 != 0) {
+                                    // Piece u
+                                    ua2_2 = ua3 / ua1;
+                                    // Poids u
+                                    ua8_2 = ua9 / ua1;
+                                    // Poids brut
+                                    ua5 = ua1 * ( ua8 + ua6 );
+                                }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                         }
                     }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                    }
+                    @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
                 });
                 // catch premiere requete
                 } catch (JSONException e) {
@@ -505,11 +555,7 @@ public class PrepaActivity extends AppCompatActivity {
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, java.lang.Throwable error) {
                 mClient1.setText("Erreur de chargement");
             }
-
-            @Override
-            public void onRetry(int retryNo) {
-                // called when request is retried
-            }
+            @Override public void onRetry(int retryNo) { }
         });
 
         //Bouton Valider
@@ -519,8 +565,9 @@ public class PrepaActivity extends AppCompatActivity {
                 wrongLot = Toast.makeText(getApplicationContext(), "Erreur lot", Toast.LENGTH_SHORT);
 
                 //Test du lot
-                if (mLot2.getText().toString().length() < 2){
-                    wrongLot.show();
+                if (mLot2.getText().toString().length() == 0){
+                    nBatchid = "N/A";
+                    Validate();
                 }
                 else if (mLot2.getText().toString().length() != 12){
                     wrongLot.show();
@@ -529,7 +576,7 @@ public class PrepaActivity extends AppCompatActivity {
                     wrongLot.show();
                 }
                 else {
-                    //batchid = 10 dernier carac du lot sans les 0
+                    //batchid = 10 derniers carac du lot sans les 0
                     nBatchid = mLot2.getText().toString().substring(3).replaceAll("^0+", "");
                     Validate();
                 }
@@ -540,7 +587,24 @@ public class PrepaActivity extends AppCompatActivity {
         mRuptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Rupture();
+                AlertDialog.Builder builder = new AlertDialog.Builder(PrepaActivity.this);
+                builder.setTitle("CONFIRMATION");
+                builder.setMessage("Confirmer rupture ?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Rupture();
+                        RuptureUpdateQoffnr();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "Annulation", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -548,16 +612,26 @@ public class PrepaActivity extends AppCompatActivity {
         mRechargeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Recharge();}
-        });
-
-        //Bouton Etiquette manquante
-        mEtiqButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EtiqMqte();
+                AlertDialog.Builder builder = new AlertDialog.Builder(PrepaActivity.this);
+                builder.setTitle("CONFIRMATION");
+                builder.setMessage("Confirmer recharge ?");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Recharge();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "Annulation", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
             }
         });
+
 
         //Bouton retour : retour au scan
         mRetourButton.setOnClickListener(new android.view.View.OnClickListener() {
@@ -581,6 +655,10 @@ public class PrepaActivity extends AppCompatActivity {
         mColis3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                // Verif champ nul
+                if ( mColis3.getText().length() == 0 ){
+                    mColis3.setText("0");
+                }
                 ua1   = Integer.parseInt(mColis3.getText().toString());
                 ua3   = ua2 * ua1;
                 ua9   = ua8 * ua1;
@@ -593,6 +671,10 @@ public class PrepaActivity extends AppCompatActivity {
         mPiece3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                // Verif champ nul
+                if ( mPiece3.getText().length() == 0 ){
+                    mPiece3.setText("0");
+                }
                 ua3 =   Integer.parseInt(mPiece3.getText().toString());
                 ua2 =   ua3 / ua1;
                 refresh();
@@ -602,6 +684,10 @@ public class PrepaActivity extends AppCompatActivity {
         mTarre3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                // Verif champ nul
+                if ( mTarre3.getText().length() == 0 ){
+                    mTarre3.setText("0");
+                }
                 ua6   = Float.parseFloat(mTarre3.getText().toString());
                 ua5   = ua1 * ( ua6 + ua8 );
 
@@ -612,6 +698,10 @@ public class PrepaActivity extends AppCompatActivity {
         mPoidBrut3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                // Verif champ nul
+                if ( mPoidBrut3.getText().length() == 0 ){
+                    mPoidBrut3.setText("0");
+                }
                 ua5   = Float.parseFloat(mPoidBrut3.getText().toString());
 
                 refresh();
@@ -621,10 +711,15 @@ public class PrepaActivity extends AppCompatActivity {
         mPoidNet3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                // Verif champ nul
+                if ( mPoidNet3.getText().length() == 0 ){
+                    mPoidNet3.setText("0");
+                }
                 ua9 = Float.parseFloat(mPoidNet3.getText().toString());
                 if (ua9 <= 0) {
                     ua8 = 0;
-                }else{
+                }
+                else {
                     ua8 = ua9 / ua1;
                 }
                 ua5   = ua1 * ( ua6 + ua8 );
