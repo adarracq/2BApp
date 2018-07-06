@@ -42,6 +42,14 @@ public class PrepaListRowDataAdapter extends ArrayAdapter<PrepaListRowData> {
                 viewHolder.itemView.setBackgroundResource(R.color.green);
             }
 
+            if(item.Recharge){
+                viewHolder.itemView.setBackgroundResource(R.color.orange);
+            }
+
+            if(item.Rupture){
+                viewHolder.itemView.setBackgroundResource(R.color.red);
+            }
+
             TextView tvArticle = viewHolder.itemView.findViewById(R.id.article);
             tvArticle.setText(item.Article);
 

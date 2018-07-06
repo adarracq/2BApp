@@ -51,6 +51,7 @@ public class PrepaListActivity extends AppCompatActivity {
     private String barcode;
     private TextView mHeader;
     private String prep = "";
+    private String q_pal_code;
 
 
     private void LoadList(){
@@ -112,6 +113,18 @@ public class PrepaListActivity extends AppCompatActivity {
                         else if (currentRow.getString("q_unitefac").replaceAll(" ", "").equalsIgnoreCase("k")) {
                             quantity = currentRow.getString("q_gcbp_ua9") + " Kg" + prep;
                         }
+
+                        // Rupture & Recharge
+                        if(currentRow.getString("q_offnr").equalsIgnoreCase("9")) {
+                            if (currentRow.getString("q_gcbp_ua1").equalsIgnoreCase("0")) {
+                                quantity = "Rupture Article";
+                                p.Rupture = true;
+                            }else{
+                                quantity = quantity + " en Recharge";
+                                p.Recharge = true;
+                            }
+                        }
+
                         p.Quantite = quantity;
 
                     } catch (JSONException e) {
@@ -132,6 +145,7 @@ public class PrepaListActivity extends AppCompatActivity {
                         Intent PrepaActivity = new Intent(PrepaListActivity.this, PrepaActivity.class);
                         PrepaActivity.putExtra("barcode", barcode);
                         PrepaActivity.putExtra("nbLignes",nbLignes);
+                        PrepaActivity.putExtra("q_pal_code",q_pal_code);
                         PrepaActivity.putExtra("position", position);
 
                         startActivity(PrepaActivity);
@@ -166,11 +180,42 @@ public class PrepaListActivity extends AppCompatActivity {
         Foretagkod = sharedPreferences.getString("Foretagkod",null);
     }
 
+    // EXEC q_2bp_RRH_GetCodePalette foretagkod, ordernr}, q_gclibrubrique
+    private void getPalCode(){
+        AsyncHttpClient client = new AsyncHttpClient();
+        // Chargement des champs
+        url = "http://" + IP + ":" + Port + "/getPalCode";
+        // Parametres body de la requete
+        RequestParams params = new RequestParams();
+        params.put("user", Sy2.user);
+        params.put("password", Sy2.password);
+        params.put("bdd", Bdd);
+        params.put("foretagkod", Foretagkod);
+        params.put("ordernr", ordernr);
+        params.put("q_gclibrubrique", barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
+        params.setUseJsonStreamer(true);
+
+        client.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                JSONObject currentRow = Helper.GetFirstRow(responseBody);
+                try{
+                    q_pal_code = currentRow.getString("q_pal_code");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         LoadVar();
+        getPalCode();
         LoadList();
     }
     @Override
@@ -178,6 +223,7 @@ public class PrepaListActivity extends AppCompatActivity {
         super.onResume();
 
         LoadVar();
+        getPalCode();
         LoadList();
     }
 }

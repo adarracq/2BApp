@@ -169,35 +169,6 @@ public class PrepaActivity extends AppCompatActivity {
         });
     }
 
-    // EXEC q_2bp_RRH_GetCodePalette foretagkod, ordernr}, q_gclibrubrique
-    private void getPalCode(){
-        // Chargement des champs
-        url = "http://" + IP + ":" + Port + "/getPalCode";
-        // Parametres body de la requete
-        RequestParams params = new RequestParams();
-        params.put("user", Sy2.user);
-        params.put("password", Sy2.password);
-        params.put("bdd", Bdd);
-        params.put("foretagkod", Foretagkod);
-        params.put("ordernr", ordernr);
-        params.put("q_gclibrubrique", barcode.toString().split(";")[1].replaceAll("[\n]+", ""));
-        params.setUseJsonStreamer(true);
-
-        client.post(url, params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                JSONObject currentRow = Helper.GetFirstRow(responseBody);
-                try{
-                    q_pal_code = currentRow.getString("q_pal_code");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) { }
-        });
-    }
-
     private boolean verifLot(){
         wrongLot = Toast.makeText(getApplicationContext(), "Erreur lot", Toast.LENGTH_SHORT);
         if(mLot2.getText().toString().length() == 0){
@@ -233,7 +204,6 @@ public class PrepaActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 }
@@ -292,6 +262,7 @@ public class PrepaActivity extends AppCompatActivity {
         params.put("ordernr", ordernr);
         params.put("dummyuniqueid", dummyuniqueid);
         params.put("ordradnr", ordradnr);
+        params.put("q_pal_code", q_pal_code);
         params.setUseJsonStreamer(true);
 
         client.post(url, params, new AsyncHttpResponseHandler() {
@@ -314,6 +285,7 @@ public class PrepaActivity extends AppCompatActivity {
         params.put("ordernr", ordernr);
         params.put("dummyuniqueid", dummyuniqueid);
         params.put("ordradnr", ordradnr);
+        params.put("q_pal_code", q_pal_code);
         params.setUseJsonStreamer(true);
 
         client.post(url, params, new AsyncHttpResponseHandler() {
@@ -387,7 +359,7 @@ public class PrepaActivity extends AppCompatActivity {
         barcode = intent.getStringExtra("barcode");
         position = intent.getIntExtra("position",0);
         nbLignes = intent.getIntExtra("nbLignes",1);
-        getPalCode();
+        q_pal_code = intent.getStringExtra("q_pal_code");
 
         mValidButton    = (android.widget.Button) findViewById(R.id.prepa_buttonValider);
         mRuptureButton  = (android.widget.Button) findViewById(R.id.prepa_buttonRupture);
@@ -601,13 +573,12 @@ public class PrepaActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Rupture();
                         RuptureUpdateQoffnr();
+                        PrepaActivity.this.finish();
                     }
                 });
                 builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "Annulation", Toast.LENGTH_SHORT).show();
-                    }
+                    public void onClick(DialogInterface dialog, int which) { }
                 });
                 builder.show();
             }
@@ -625,13 +596,12 @@ public class PrepaActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Recharge();
+                        PrepaActivity.this.finish();
                     }
                 });
                 builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "Annulation", Toast.LENGTH_SHORT).show();
-                    }
+                    public void onClick(DialogInterface dialog, int which) { }
                 });
                 builder.show();
             }

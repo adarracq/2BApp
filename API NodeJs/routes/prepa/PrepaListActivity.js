@@ -31,6 +31,7 @@ function loadLines (foretagkod, ordernr, q_gclibrubrique){
                   q_2bt_prepa.ordradnr,
                   q_2bt_prepa.OrdRadNrStrPos,
                   q_2bt_prepa.ordrestnr,
+                  q_2bt_prepa.q_offnr,
                   fr.ftgnamn
 
               FROM q_2bt_prepa WITH(NOLOCK)

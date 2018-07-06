@@ -73,7 +73,8 @@ module.exports = function(app){
       var request = ruptureBtn(req.body.foretagkod,
                                req.body.ordernr,
                                req.body.dummyuniqueid,
-                               req.body.ordradnr);
+                               req.body.ordradnr,
+                               req.body.q_pal_code);
       console.log(request);
       await app.executeSQLQuery(req, res, request);
     });
@@ -83,7 +84,8 @@ module.exports = function(app){
       var request = rechargeBtn(req.body.foretagkod,
                                req.body.ordernr,
                                req.body.dummyuniqueid,
-                               req.body.ordradnr);
+                               req.body.ordradnr,
+                               req.body.q_pal_code);
       console.log(request);
       await app.executeSQLQuery(req, res, request);
     });
@@ -251,18 +253,18 @@ function validateBtn (foretagkod,
 
 
 
-function ruptureBtn (foretagkod, ordernr, dummyuniqueid, ordradnr){
+function ruptureBtn (foretagkod, ordernr, dummyuniqueid, ordradnr, q_pal_code){
   return `UPDATE q_2bt_prepa
 
               SET   q_gcbp_ua1  = 0,
                     q_gcbp_ua2  = q_gcbp_ua2_2,
                     q_gcbp_ua3  = 0,
-                    q_gcbp_ua8  = q_gcbp_ua8_8,
+                    q_gcbp_ua8  = q_gcbp_ua8_2,
                     q_gcbp_ua9  = 0,
                     batchid     = 'N/A',
                     q_offnr     = '9',
                     artftgspec3 = '1',
-                    q_pal_code  = ????????????
+                    q_pal_code  = '${q_pal_code}'
 
       		WHERE foretagkod	    = ${foretagkod}
       		AND	  ordernr		      = ${ordernr}
@@ -272,10 +274,10 @@ function ruptureBtn (foretagkod, ordernr, dummyuniqueid, ordradnr){
 
 
 
-function rechargeBtn (foretagkod, ordernr, dummyuniqueid, ordradnr){
+function rechargeBtn (foretagkod, ordernr, dummyuniqueid, ordradnr, q_pal_code){
   return `UPDATE q_2bt_prepa
 
-      	SET q_pal_code = ??????????,
+      	SET q_pal_code = '${q_pal_code}',
       			q_gcbp_ua1 = case ar.enhetskod when  'C' then ISNULL( NULLIF (q_gcbp_ua1_2,0),1)else q_gcbp_ua1_2 end,
       			q_gcbp_ua2 = q_gcbp_ua2_2 ,
       			q_gcbp_ua3 = case   ar.enhetskod when  'ST' then  ISNULL( NULLIF (q_gcbp_ua3_2,0),1)else q_gcbp_ua3_2 end,
@@ -289,10 +291,10 @@ function rechargeBtn (foretagkod, ordernr, dummyuniqueid, ordradnr){
 
             WHERE q_2bt_prepa.foretagkod = ar.ForetagKod
             AND   q_2bt_prepa.artnr = ar.artnr
-            AND   foretagkod	    = ${foretagkod}
-        		AND	  ordernr		      = ${ordernr}
-        		AND	  dummyuniqueid		= '${dummyuniqueid}'
-        		AND	  ordradnr		    = ${ordradnr}`
+            AND   q_2bt_prepa.foretagkod	    = ${foretagkod}
+        		AND	  q_2bt_prepa.ordernr		      = ${ordernr}
+        		AND	  q_2bt_prepa.dummyuniqueid		= '${dummyuniqueid}'
+        		AND	  q_2bt_prepa.ordradnr		    = ${ordradnr}`
 }
 
 
